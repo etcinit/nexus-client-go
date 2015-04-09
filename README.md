@@ -2,6 +2,8 @@
 
 Golang client for the [Nexus Configuration Server](https://github.com/etcinit/nexus)
 
+[![wercker status](https://app.wercker.com/status/c26821e52e8123680b10ea95b16df14c/m "wercker status")](https://app.wercker.com/project/bykey/c26821e52e8123680b10ea95b16df14c)
+
 ## Documentation
 
 Available at https://godoc.org/github.com/etcinit/nexus-client-go
