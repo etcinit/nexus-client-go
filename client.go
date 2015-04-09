@@ -7,7 +7,7 @@ import (
 	"unicode/utf8"
 
 	"github.com/PuerkitoBio/purell"
-	"github.com/etcinit/nexus-client-go/responses"
+	"github.com/etcinit/nexusgo/responses"
 	"github.com/parnurzeal/gorequest"
 )
 

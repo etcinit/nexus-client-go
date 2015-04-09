@@ -6,10 +6,10 @@ Golang client for the [Nexus Configuration Server](https://github.com/etcinit/ne
 
 ## Documentation
 
-Available at https://godoc.org/github.com/etcinit/nexus-client-go
+Available at https://godoc.org/github.com/etcinit/nexusgo
 
 ## Setup
 
 1. Setup a Nexus server
-2. Get the library: `go get github.com/etcinit/nexus-client-go`
+2. Get the library: `go get github.com/etcinit/nexusgo`
 3. Construct a client instance and fetch configuration files for your app
