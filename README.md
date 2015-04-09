@@ -1,6 +1,6 @@
 # Nexus Client (go)
 
-Golang client for the Nexus Configuration Server [Nexus Configuration Server](https://github.com/etcinit/nexus)
+Golang client for the [Nexus Configuration Server](https://github.com/etcinit/nexus)
 
 ## Documentation
 

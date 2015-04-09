@@ -3,7 +3,6 @@ package nexus
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"os"
 	"unicode/utf8"
 
@@ -69,8 +68,6 @@ func (c *Client) buildAuthHeader() string {
 func (c *Client) Fetch() (*responses.FetchResponse, []error) {
 	url := c.buildURL("/v1/fetch")
 
-	fmt.Println(url)
-
 	_, body, errs := gorequest.New().
 		Get(url).
 		Set("Authorization", c.buildAuthHeader()).
@@ -82,8 +79,6 @@ func (c *Client) Fetch() (*responses.FetchResponse, []error) {
 
 	var response responses.FetchResponse
 	json.Unmarshal([]byte(body), &response)
-
-	fmt.Println(response)
 
 	return &response, nil
 }
