@@ -7,6 +7,7 @@ import (
 	"unicode/utf8"
 
 	"github.com/PuerkitoBio/purell"
+	"github.com/etcinit/nexus-client-go/requests"
 	"github.com/etcinit/nexus-client-go/responses"
 	"github.com/parnurzeal/gorequest"
 )
@@ -64,7 +65,8 @@ func (c *Client) buildAuthHeader() string {
 	return "Bearer " + c.token
 }
 
-// Fetch fetches all configuration variables assigned to the token
+// Fetch fetches all configuration variables assigned to the token. Nexus will
+// return all the key/value pairs associated with the token application.
 func (c *Client) Fetch() (*responses.FetchResponse, []error) {
 	url := c.buildURL("/v1/fetch")
 
@@ -81,4 +83,25 @@ func (c *Client) Fetch() (*responses.FetchResponse, []error) {
 	json.Unmarshal([]byte(body), &response)
 
 	return &response, nil
+}
+
+// Ping sends a ping to the Nexus server with the provided server name and
+// message. Used for reporting the version or status of a server.
+func (c *Client) Ping(name string, message string) []error {
+	url := c.buildURL("/v1/ping")
+
+	_, _, errs := gorequest.New().
+		Post(url).
+		Set("Authorization", c.buildAuthHeader()).
+		Send(requests.PingRequest{
+		Name:    name,
+		Message: message,
+	}).
+		End()
+
+	if errs != nil {
+		return errs
+	}
+
+	return nil
 }

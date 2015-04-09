@@ -1,11 +1,13 @@
 package nexus
 
 import (
+	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"os"
 	"testing"
 
+	"github.com/etcinit/nexus-client-go/requests"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -63,6 +65,47 @@ func Test_FetchWithError(t *testing.T) {
 	client := NewClient("http://127.0.0.1/fake", token)
 
 	_, err := client.Fetch()
+
+	assert.NotNil(t, err)
+}
+
+func Test_Ping(t *testing.T) {
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// Check method is GET before going to check other features
+		if r.Method != "POST" {
+			t.Errorf("Expected method %q; got %q", "GET", r.Method)
+		}
+		if r.Header == nil {
+			t.Errorf("Expected non-nil request Header")
+		}
+		switch r.URL.Path {
+		default:
+			t.Errorf("No testing for this case yet : %q", r.URL.Path)
+		case "/v1/ping":
+			t.Logf("case %v ", "/v1/ping OK")
+
+			decoder := json.NewDecoder(r.Body)
+			var request requests.PingRequest
+			decoder.Decode(&request)
+
+			assert.Equal(t, request.Name, "server1")
+			assert.Equal(t, request.Message, "all systems go")
+
+			w.WriteHeader(200)
+		}
+	}))
+
+	defer ts.Close()
+
+	client := NewClient(ts.URL, token)
+
+	client.Ping("server1", "all systems go")
+}
+
+func Test_PingWithError(t *testing.T) {
+	client := NewClient("http://127.0.0.1/fake", token)
+
+	err := client.Ping("server1", "all systems go")
 
 	assert.NotNil(t, err)
 }
