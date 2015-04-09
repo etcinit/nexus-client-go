@@ -105,3 +105,24 @@ func (c *Client) Ping(name string, message string) []error {
 
 	return nil
 }
+
+// Log pushes logs lines to Nexus
+func (c *Client) Log(name string, logName string, lines []string) []error {
+	url := c.buildURL("/v1/logs")
+
+	_, _, errs := gorequest.New().
+		Post(url).
+		Set("Authorization", c.buildAuthHeader()).
+		Send(requests.LogsRequest{
+		Name:    name,
+		LogName: logName,
+		Lines:   lines,
+	}).
+		End()
+
+	if errs != nil {
+		return errs
+	}
+
+	return nil
+}

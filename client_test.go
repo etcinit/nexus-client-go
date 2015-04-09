@@ -109,3 +109,47 @@ func Test_PingWithError(t *testing.T) {
 
 	assert.NotNil(t, err)
 }
+
+func Test_Log(t *testing.T) {
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// Check method is GET before going to check other features
+		if r.Method != "POST" {
+			t.Errorf("Expected method %q; got %q", "GET", r.Method)
+		}
+		if r.Header == nil {
+			t.Errorf("Expected non-nil request Header")
+		}
+		switch r.URL.Path {
+		default:
+			t.Errorf("No testing for this case yet : %q", r.URL.Path)
+		case "/v1/logs":
+			t.Logf("case %v ", "/v1/logs OK")
+
+			decoder := json.NewDecoder(r.Body)
+			var request requests.LogsRequest
+			decoder.Decode(&request)
+
+			assert.Equal(t, request.Name, "server1")
+			assert.Equal(t, request.LogName, "system.log")
+			assert.Len(t, request.Lines, 2)
+
+			w.WriteHeader(200)
+		}
+	}))
+
+	defer ts.Close()
+
+	client := NewClient(ts.URL, token)
+
+	err := client.Log("server1", "system.log", []string{"wow", "warning"})
+
+	assert.Nil(t, err)
+}
+
+func Test_LogWithError(t *testing.T) {
+	client := NewClient("http://127.0.0.1/fake", token)
+
+	err := client.Log("server1", "system.log", []string{"wow", "warning"})
+
+	assert.NotNil(t, err)
+}
