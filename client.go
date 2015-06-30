@@ -31,7 +31,7 @@ func NewClient(endpoint string, token string) *Client {
 // NewClientFromEnv creates a new instance of a NexusClient from environment
 // variables
 func NewClientFromEnv() (*Client, error) {
-	endpoint := os.Getenv("NEXUS_ENDPOINT")
+	endpoint := os.Getenv("NEXUS_SERVER")
 	token := os.Getenv("NEXUS_APIKEY")
 
 	if utf8.RuneCountInString(endpoint) < 1 || utf8.RuneCountInString(endpoint) < 1 {
