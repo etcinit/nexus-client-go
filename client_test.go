@@ -23,7 +23,7 @@ func Test_NewClientFromEnv(t *testing.T) {
 
 	assert.NotNil(t, err)
 
-	os.Setenv("NEXUS_ENDPOINT", endpoint)
+	os.Setenv("NEXUS_SERVER", endpoint)
 	os.Setenv("NEXUS_APIKEY", token)
 
 	client, err2 := NewClientFromEnv()
